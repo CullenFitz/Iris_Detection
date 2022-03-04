@@ -2,12 +2,12 @@ import cv2
 import numpy as np
 from PIL import Image
 
-img1 = [r"C:\Users\Cullen\Downloads\iris_matlab\iris1.jpg", 70, 100]
-img2 = [r"C:\Users\Cullen\Downloads\iris_matlab\iris2.jpg", 50, 70]
-img3 = [r"C:\Users\Cullen\Downloads\iris_matlab\iris3.jpg", 60, 100]
-img4 = [r"C:\Users\Cullen\Downloads\iris_matlab\iris4.jpg", 60, 50]
-img5 = [r"C:\Users\Cullen\Downloads\iris_matlab\iris5.jpg", 90, 110]
-img6 = [r"C:\Users\Cullen\Downloads\iris_matlab\iris6.jpg", 80, 80]
+img1 = [r"iris1.jpg", 70, 100]
+img2 = [r"iris2.jpg", 50, 70]
+img3 = [r"iris3.jpg", 60, 100]
+img4 = [r"iris4.jpg", 60, 50]
+img5 = [r"iris5.jpg", 90, 110]
+img6 = [r"iris6.jpg", 80, 80]
 
 imgArr = [img1, img2, img3, img4, img5, img6]
 
