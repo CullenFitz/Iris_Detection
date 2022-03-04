@@ -1,6 +1,3 @@
-import numpy as np
-import cv2 as cv
-
 import cv2
 import numpy as np
 
@@ -20,29 +17,37 @@ for i in imgArr:
     img2 = cv2.imread(i[0])
     cimg = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
 
+    height, width = img.shape
+    mask = np.zeros((height, width), np.uint8)
+
+    counter = 0
+
     circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,20,
                                 param1=i[1],param2=i[2],minRadius=0,maxRadius=0)
 
     circles = np.uint16(np.around(circles))
     for j in circles[0,:]:
+
         # draw the outer circle
         cv2.circle(cimg,(j[0],j[1]),j[2],(0,255,0),2)
         # draw the center of the circle
         cv2.circle(cimg,(j[0],j[1]),2,(0,0,255),3)
 
-        # crop eye from image
-        print(j[0],j[1],j[2])
-        mask1 = np.zeros_like(img2)
-        mask1 = cv2.circle(mask1, (j[0], j[1]), j[2], (255, 255, 255), -1)
-        mask2 = np.zeros_like(img)
-        mask2 = cv2.circle(mask2, (j[0], j[1]), j[2], (255, 255, 255), -1)
+        cv2.circle(mask, (j[0], j[1]), j[2], (255, 255, 255), -1)
+        masked_data = cv2.bitwise_and(cimg, cimg, mask=mask)
 
-        mask = cv2.subtract(mask2, mask1)
+        # Apply Threshold
+        _, thresh = cv2.threshold(mask, 1, 255, cv2.THRESH_BINARY)
 
-        result = cv2.cvtColor(img, cv2.COLOR_BGR2BGRA)
-        result[:, :, 3] = mask[:, :, 0]
+        cnt = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]
 
-        cv2.imshow('detected circles', result)
+        # print len(contours)
+        x, y, w, h = cv2.boundingRect(cnt[0])
+
+        # Crop masked_data
+        crop = masked_data[y:y + h, x:x + w]
+
+        cv2.imshow('detected circles', crop)
 
     cv2.waitKey(0)
     cv2.destroyAllWindows()
